@@ -1,18 +1,84 @@
 #include <stdio.h>
 
-#define TAM 25
+float le_valida_media();
+float calcular_media(int quantidade, float soma);
+void cabecalho();
+void rodape(int aprovados, int reprovados, float maior, float menor);
 
-int main(void)
-{
-    float media[TAM];
-    int i;
-    printf("-----MEDIAS DOS ALUNOS-----\n");
+int main() {
+    float media, soma = 0, maior = 0, menor = 10;
+    int aprovados = 0, reprovados = 0, quantidade = 0;
 
-    printf("Digite a %d media: ");
-    scanf("%f", &media);
+    cabecalho();
+
+    do {
+        media = le_valida_media();
+
+        if (media < menor) {
+            menor = media;
+        }
+
+        if (media > maior) {
+            maior = media;
+        }
+
+        if (media >= 6.9) {
+            aprovados++;
+        } else {
+            reprovados++;
+        }
+
+        soma += media;
+        quantidade++;
+    } while (quantidade < 25 && media >= 0);
+
+    if (quantidade == 0) {
+        printf("Nenhuma nota informada.\n");
+        return 0;
+    }
+
+    float media_turma = calcular_media(quantidade, soma);
+
+    rodape(aprovados, reprovados, maior, menor);
+
+    printf("Media da turma: %.1f\n", media_turma);
+    printf("Maior nota: %.1f\n", maior);
+    printf("Menor nota: %.1f\n", menor);
+    printf("Reprovados: %d\n", reprovados);
+    printf("Aprovados: %d\n", aprovados);
+
     return 0;
 }
 
+float le_valida_media() {
+    float media;
+    do {
+        printf("Informe uma media entre 0 e 10 (ou um valor negativo para encerrar): ");
+        scanf("%f", &media);
+    } while (media < 0 || media > 10);
+
+    return media;
+}
+
+float calcular_media(int quantidade, float soma) {
+    return soma / quantidade;
+}
+
+void cabecalho() {
+    printf("------------------\n");
+    printf("Relatorio da turma\n");
+    printf("------------------\n");
+}
+
+void rodape(int aprovados, int reprovados, float maior, float menor) {
+    printf("------------------\n");
+    printf("Resultados:\n");
+    printf("Aprovados: %d\n", aprovados);
+    printf("Reprovados: %d\n", reprovados);
+    printf("Menor media: %.1f\n", menor);
+    printf("Maior media: %.1f\n", maior);
+    printf("------------------\n");
+}
 
 
 //Receber 25 medias e retornar quantos aprovados, quantos reprovados e a menor media informada (<6.9 = aprovado)
